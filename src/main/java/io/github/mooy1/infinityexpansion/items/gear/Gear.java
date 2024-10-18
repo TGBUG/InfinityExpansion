@@ -239,6 +239,9 @@ public final class Gear {
                 Materials.ENDER_ESSENCE, SlimefunItems.BLANK_RUNE, Materials.ENDER_ESSENCE,
                 Materials.MAGSTEEL_PLATE, SlimefunItems.PICKAXE_OF_VEIN_MINING, Materials.MAGSTEEL_PLATE,
         }).register(plugin);
+
+
+
     }
 
     private static void addInfinityEnchants(InfinityExpansion plugin, SlimefunItemStack... items) {
@@ -276,5 +279,6 @@ public final class Gear {
             item.setItemMeta(meta);
         }
     }
+
 
 }

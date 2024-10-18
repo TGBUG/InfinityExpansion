@@ -8,14 +8,12 @@ import javax.annotation.Nonnull;
 
 import io.github.thebusybiscuit.slimefun4.core.attributes.Rechargeable;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import io.github.mooy1.infinitylib.common.Events;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
@@ -26,11 +24,11 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.Soulbound;
 import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.items.SimpleSlimefunItem;
 
-
 public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> implements Listener, Soulbound, NotPlaceable, Rechargeable {
 
     private final float capacity;
-    private final HashMap<Player, Location> lastLocations = new HashMap<>();
+    private final HashMap<Player, Location> playerLocations = new HashMap<>();
+    private final HashMap<Player, World> playerWorlds = new HashMap<>();
 
     public InfinityMatrix(ItemGroup category, SlimefunItemStack item, RecipeType type, ItemStack[] recipe, float capacity) {
         super(category, item, type, recipe);
@@ -64,7 +62,6 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
             List<String> lore = meta.getLore();
 
             Player p = e.getPlayer();
-            p.sendMessage(String.valueOf(item));
 
             Iterator<String> iterator = lore.listIterator();
 
@@ -90,6 +87,10 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
                         disableFlight(p);
                     } else {
                         enableFlight(p);
+                            if (getItemCharge(item) == 0){
+                                disableFlight(p);
+                                p.sendMessage(ChatColor.RED + "飞行器电量不足!");
+                            }
                     }
 
                     return;
@@ -105,39 +106,63 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
         };
     }
 
-    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent e) {
-        Player p = e.getPlayer();
-        Location lastLocation = lastLocations.get(p);
-        Location currentLocation = p.getLocation();
-
-        if (lastLocation == null || lastLocation.distance(currentLocation) >= 1) {
-            lastLocations.put(p, currentLocation);
-
-            ItemStack item = (getItem());
-            p.sendMessage("test");
-            if (p.getAllowFlight()) {
-                p.sendMessage(String.valueOf(item));
-                p.sendMessage(String.valueOf(getItemCharge(item)));
-                p.sendMessage(String.valueOf(getMaxItemCharge(item)));
-                if (removeItemCharge(item, (float) lastLocation.distance(currentLocation))) {
-                    p.sendMessage(String.valueOf(getItemCharge(item)));
-                    if (getItemCharge(item) <= 128) {
-                        p.sendMessage(ChatColor.RED + "飞行器电量低!");
-                    }
-                } else {
-                    disableFlight(p);
-                    p.sendMessage(ChatColor.RED + "飞行器电量不足!");
-                }
-            }
-        }
-    }
-
-
     @Override
     public float getMaxItemCharge(ItemStack item) {
         return capacity;
     }
 
+    public boolean removeMatrixCharge(Player p, float charge, ItemStack item) {
+        if (charge == 0 || charge > 100 && !(getItemCharge(item) == 0)) {
+            return true;
+        }
+        else {
+            if (removeItemCharge(item, charge)) {
+                if (getItemCharge(item) <= 128) {
+                    p.sendMessage(ChatColor.RED + "飞行器电量低!");
+                }
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+
+
+    public void MatrixChargeTask(){
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            Location currentLocation = p.getLocation();
+            if (p.getWorld().equals(playerWorlds.get(p)) && p.getAllowFlight()){
+                float charge = (float) currentLocation.distance(playerLocations.getOrDefault(p, currentLocation)) * 4;
+                boolean removed = false;
+
+                for (ItemStack item : p.getInventory().getContents()) {
+                    if (item != null && item.getType() == Material.NETHER_STAR) {
+                        if (removeMatrixCharge(p, charge, item)) {
+                            removed = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!removed) {
+                    disableFlight(p);
+                    p.sendMessage(ChatColor.RED + "飞行器电量不足!");
+                }
+            }
+            playerLocations.put(p, currentLocation);
+            playerWorlds.put(p, p.getWorld());
+        }
+    }
+
+    public BukkitRunnable MatrixCharge = new BukkitRunnable() {
+        @Override
+        public void run() {
+            MatrixChargeTask();
+        }
+    };
+
 
 }
+
+

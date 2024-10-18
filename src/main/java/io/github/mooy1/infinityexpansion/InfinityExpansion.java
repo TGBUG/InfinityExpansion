@@ -5,8 +5,14 @@ import java.util.logging.Level;
 
 import javax.annotation.Nonnull;
 
+import io.github.mooy1.infinityexpansion.items.blocks.InfinityWorkbench;
+import io.github.mooy1.infinityexpansion.items.gear.InfinityMatrix;
+
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
 
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
@@ -32,8 +38,10 @@ import io.github.mooy1.infinitylib.core.AbstractAddon;
 import io.github.mooy1.infinitylib.metrics.bukkit.Metrics;
 import io.github.mooy1.infinitylib.metrics.charts.SimplePie;
 
-import net.guizhanss.guizhanlibplugin.updater.GuizhanBuildsUpdaterWrapper;
 import net.guizhanss.slimefun4.utils.WikiUtils;
+
+import static io.github.mooy1.infinityexpansion.items.gear.Gear.INFINITY_MATRIX;
+
 
 public final class InfinityExpansion extends AbstractAddon {
 
@@ -47,12 +55,14 @@ public final class InfinityExpansion extends AbstractAddon {
         StorageSaveFix.fixStuff(getLogger());
     }
 
+
     @Override
     protected void enable() {
         Metrics metrics = new Metrics(this, 8991);
         boolean enableAutoUpdate = getConfig().getBoolean("auto-update");
         String autoUpdates = String.valueOf(enableAutoUpdate);
         metrics.addCustomChart(new SimplePie("auto_updates", () -> autoUpdates));
+
 
         if (enableAutoUpdate && getDescription().getVersion().startsWith("Build")) {
             GuizhanUpdater.start(this, getFile(), "SlimefunGuguProject", "InfinityExpansion", "master");
@@ -91,6 +101,16 @@ public final class InfinityExpansion extends AbstractAddon {
         if (getConfig().getBoolean("balance-options.enable-researches")) {
             Researches.setup();
         }
+
+        InfinityMatrix MatrixCharge = new InfinityMatrix(Groups.INFINITY_CHEAT, INFINITY_MATRIX, InfinityWorkbench.TYPE, new ItemStack[] {
+            Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT,
+            Generators.INFINITY_REACTOR, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Generators.INFINITY_REACTOR,
+            Materials.VOID_INGOT, Materials.INFINITE_CIRCUIT, SlimefunItems.SOULBOUND_ELYTRA, SlimefunItems.SOULBOUND_ELYTRA, Materials.INFINITE_CIRCUIT, Materials.VOID_INGOT,
+            Materials.VOID_INGOT, Materials.INFINITE_CIRCUIT, Generators.INFINITE_PANEL, Generators.INFINITE_PANEL, Materials.INFINITE_CIRCUIT, Materials.VOID_INGOT,
+            Generators.INFINITY_REACTOR, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Generators.INFINITY_REACTOR,
+            Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT
+        }, 8192);
+        MatrixCharge.MatrixCharge.runTaskTimer(this, 20, 20);
     }
 
     @Override
@@ -101,5 +121,7 @@ public final class InfinityExpansion extends AbstractAddon {
     public String getWikiURL() {
         return "https://slimefun-addons-wiki.guizhanss.cn/infinity-expansion/{0}";
     }
+
+
 
 }
