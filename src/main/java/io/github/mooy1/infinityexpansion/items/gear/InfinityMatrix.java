@@ -37,13 +37,20 @@ public final class InfinityMatrix extends SimpleSlimefunItem<ItemUseHandler> imp
     }
 
     private static void disableFlight(Player p) {
-        p.sendMessage(ChatColor.RED + "无尽飞行已禁用!");
-        p.setAllowFlight(false);
+        if (p.getGameMode() != GameMode.CREATIVE) {
+            p.sendMessage(ChatColor.RED + "无尽飞行已禁用!");
+            p.setAllowFlight(false);
+        }
     }
 
     private static void enableFlight(Player p) {
-        p.sendMessage(ChatColor.GREEN + "无尽飞行已启用!");
-        p.setAllowFlight(true);
+        if (p.getGameMode() != GameMode.CREATIVE) {
+            p.sendMessage(ChatColor.GREEN + "无尽飞行已启用!");
+            p.setAllowFlight(true);
+        }
+        else {
+            p.sendMessage(ChatColor.AQUA + "你™已经在创造模式了啊!");
+        }
     }
 
 
