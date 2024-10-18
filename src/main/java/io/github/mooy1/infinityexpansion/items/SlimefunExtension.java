@@ -38,6 +38,8 @@ import io.github.thebusybiscuit.slimefun4.implementation.items.geo.GEOMiner;
 import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineFuel;
 
+import static io.github.mooy1.infinityexpansion.items.gear.Gear.INFINITY_MATRIX;
+
 @UtilityClass
 public final class SlimefunExtension {
 

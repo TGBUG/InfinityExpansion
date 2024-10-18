@@ -101,16 +101,6 @@ public final class InfinityExpansion extends AbstractAddon {
         if (getConfig().getBoolean("balance-options.enable-researches")) {
             Researches.setup();
         }
-
-        InfinityMatrix MatrixCharge = new InfinityMatrix(Groups.INFINITY_CHEAT, INFINITY_MATRIX, InfinityWorkbench.TYPE, new ItemStack[] {
-            Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT,
-            Generators.INFINITY_REACTOR, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Generators.INFINITY_REACTOR,
-            Materials.VOID_INGOT, Materials.INFINITE_CIRCUIT, SlimefunItems.SOULBOUND_ELYTRA, SlimefunItems.SOULBOUND_ELYTRA, Materials.INFINITE_CIRCUIT, Materials.VOID_INGOT,
-            Materials.VOID_INGOT, Materials.INFINITE_CIRCUIT, Generators.INFINITE_PANEL, Generators.INFINITE_PANEL, Materials.INFINITE_CIRCUIT, Materials.VOID_INGOT,
-            Generators.INFINITY_REACTOR, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Generators.INFINITY_REACTOR,
-            Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT
-        }, 8192);
-        MatrixCharge.MatrixCharge.runTaskTimer(this, 20, 20);
     }
 
     @Override

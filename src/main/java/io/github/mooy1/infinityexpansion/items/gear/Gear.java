@@ -226,7 +226,7 @@ public final class Gear {
                 null, Materials.VOID_INGOT, null, null, null, Materials.VOID_INGOT,
                 Materials.VOID_INGOT, null, null, null, null, null
         }).register(plugin);
-        new InfinityMatrix(Groups.INFINITY_CHEAT, INFINITY_MATRIX, InfinityWorkbench.TYPE, new ItemStack[] {
+        new ChargableInfinityMatrix(Groups.INFINITY_CHEAT, INFINITY_MATRIX, InfinityWorkbench.TYPE, new ItemStack[] {
                 Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT, Materials.INFINITE_INGOT, null, Materials.INFINITE_INGOT,
                 Generators.INFINITY_REACTOR, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Materials.INFINITE_CIRCUIT, Generators.INFINITY_REACTOR,
                 Materials.VOID_INGOT, Materials.INFINITE_CIRCUIT, SlimefunItems.SOULBOUND_ELYTRA, SlimefunItems.SOULBOUND_ELYTRA, Materials.INFINITE_CIRCUIT, Materials.VOID_INGOT,
